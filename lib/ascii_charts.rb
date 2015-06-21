@@ -253,7 +253,7 @@ module AsciiCharts
 
       lines = [' ']
 
-      lines += labels
+      lines += labels.reverse
 
       self.y_range.each_with_index do |current_y, i|
         yval = current_y.to_s
