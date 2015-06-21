@@ -240,7 +240,8 @@ module AsciiCharts
 
       left_margin = (' ' * (bar_width - 1)) + ' '
 
-      [self.data.map(&:last)] +
+
+      [left_margin + self.data.map{|pair| pair[1].to_s.center(bar_width) }] + 
       passes_count.times.collect{|pass|
         left_margin + wrapped.map{|txt|
           txt[pass].to_s.center(bar_width)
