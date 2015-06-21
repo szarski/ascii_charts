@@ -238,7 +238,7 @@ module AsciiCharts
 
       passes_count = wrapped.map(&:count).max
 
-      left_margin = (' ' * (bar_width - 1)) + ' '
+      left_margin = (' ' * (self.max_yval_width)) + ' '
 
 
       [left_margin + self.data.map{|pair| pair[1].to_s.center(bar_width) }.join('')] + 
