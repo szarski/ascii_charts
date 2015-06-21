@@ -223,6 +223,28 @@ module AsciiCharts
   end
 
   class Cartesian < Chart
+    def xval_wrapwidth
+      options[:xval_wrapwidth] || 'this is the maximum length'.length
+    end
+
+    def bar_width
+      [self.max_xval_width + 1, self.xval_wrapwidth].min
+    end
+
+    def labels
+      wrapped = self.rounded_data.map {|pair|
+        pair[0].to_s.scan(Regexp.new(".{1,#{bar_width - 1 }}"))
+      }
+
+      passes_count = wrapped.map(&:count).max
+
+      left_margin = (' ' * (bar_width - 1)) + ' '
+      passes_count.times.collect{|pass|
+        left_margin + wrapped.map{|txt|
+          txt[pass].to_s.center(bar_width)
+        }.join('')
+      }
+    end
 
     def lines
       if self.data.size == 0
@@ -230,10 +252,8 @@ module AsciiCharts
       end
 
       lines = [' ']
-      
-      bar_width = self.max_xval_width + 1
 
-      lines << (' ' * self.max_yval_width) + ' ' + self.rounded_data.map{|pair| pair[0].to_s.center(bar_width)}.join('')
+      lines += labels
 
       self.y_range.each_with_index do |current_y, i|
         yval = current_y.to_s
